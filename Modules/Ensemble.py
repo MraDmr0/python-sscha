@@ -1349,7 +1349,8 @@ Error, the following stress files are missing from the ensemble:
 
 
 
-    def generate(self, N, evenodd = True, project_on_modes = None, sobol = False, sobol_scramble = False, sobol_scatter = 0.0, isCovClassical = False):
+    def generate(self, N, evenodd = True, project_on_modes = None, sobol = False, sobol_scramble = False, sobol_scatter = 0.0,
+                 classical_limit = False):
         """
         GENERATE THE ENSEMBLE
         =====================
@@ -1373,7 +1374,7 @@ Error, the following stress files are missing from the ensemble:
                 Set the optional scrambling of the generated numbers taken from the Sobol sequence.
             sobol_scatter : real (0.0 to 1) (Deafault = 0.0)
                 Set the scatter parameter to displace the Sobol positions randommly.
-            isCovClassical : bool, optional (Default = False)
+            classical_limit : bool, optional (Default = False)
                 Set the classical limit in the covariance matrix, useful to exclude nuclear quantum effects.
 
         """
@@ -1389,7 +1390,7 @@ Error, the following stress files are missing from the ensemble:
 
         structures = []
         if evenodd:
-            structs = self.dyn_0.ExtractRandomStructures(N // 2, self.T0, project_on_vectors = project_on_modes, lock_low_w = self.ignore_small_w, sobol = sobol, sobol_scramble = sobol_scramble, sobol_scatter = sobol_scatter, isCovClassical = isCovClassical)  # normal Sobol generator****Diegom_test****
+            structs = self.dyn_0.ExtractRandomStructures(N // 2, self.T0, project_on_vectors = project_on_modes, lock_low_w = self.ignore_small_w, sobol = sobol, sobol_scramble = sobol_scramble, sobol_scatter = sobol_scatter, classical_limit = classical_limit)  # normal Sobol generator****Diegom_test****
 
 
 
@@ -1400,7 +1401,7 @@ Error, the following stress files are missing from the ensemble:
                 new_s.coords = super_struct.coords - new_s.get_displacement(super_struct)
                 structures.append(new_s)
         else:
-            structures = self.dyn_0.ExtractRandomStructures(N, self.T0, project_on_vectors = project_on_modes, lock_low_w = self.ignore_small_w, sobol = sobol, sobol_scramble = sobol_scramble, sobol_scatter = sobol_scatter, isCovClassical = isCovClassical)  # normal Sobol generator****Diegom_test****
+            structures = self.dyn_0.ExtractRandomStructures(N, self.T0, project_on_vectors = project_on_modes, lock_low_w = self.ignore_small_w, sobol = sobol, sobol_scramble = sobol_scramble, sobol_scatter = sobol_scatter, classical_limit = classical_limit)  # normal Sobol generator****Diegom_test****
 
 
         # Enforce all the processors to share the same structures
