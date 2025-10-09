@@ -1398,7 +1398,7 @@ Error, the following stress files are missing from the ensemble:
         structures = []
         if evenodd:
             #
-            # With antithetic sampling we use 
+            # With antithetic sampling we use + displacement and - displacement  
             #
             structs = self.dyn_0.ExtractRandomStructures(N // 2, self.T0, project_on_vectors = project_on_modes, lock_low_w = self.ignore_small_w, sobol = sobol, sobol_scramble = sobol_scramble, sobol_scatter = sobol_scatter, classical_limit = classical_limit, zg_disp = zg_disp)  # normal Sobol generator****Diegom_test****
 
