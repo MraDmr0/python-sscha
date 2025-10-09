@@ -1350,7 +1350,7 @@ Error, the following stress files are missing from the ensemble:
 
 
     def generate(self, N, evenodd = True, project_on_modes = None, sobol = False, sobol_scramble = False, sobol_scatter = 0.0,
-                 classical_limit = False):
+                 classical_limit = False, zg_disp = False):
         """
         GENERATE THE ENSEMBLE
         =====================
@@ -1363,8 +1363,8 @@ Error, the following stress files are missing from the ensemble:
         ----------
             N : int
                 The number of random configurations to be extracted
-            evenodd : bool, optional
-                If true for each configuration also the opposite is extracted
+            evenodd : bool, optional (Default = True)
+                If true for each configuration also the opposite is extracted (antithetic sampling).
             project_on_modes : ndarray(size=(3*nat_sc, nproj)), optional
                 If different from None the displacements are projected on the
                 given modes.
@@ -1376,11 +1376,18 @@ Error, the following stress files are missing from the ensemble:
                 Set the scatter parameter to displace the Sobol positions randommly.
             classical_limit : bool, optional (Default = False)
                 Set the classical limit in the covariance matrix, useful to exclude nuclear quantum effects.
+            zg_disp : bool, optional (Default = False)
+                Use the Zacharias-Giustino special displacement. Only works with N=2 (N=1 if evenodd=False).
 
         """
 
         if evenodd and (N % 2 != 0):
             raise ValueError("Error, evenodd allowed only with an even number of random structures")
+            if zg_vector and (N != 2):
+               raise ValueError("Error, zg_vector allowed only with 2 structures")
+        else:
+            if zg_vector and (N != 1):
+               raise ValueError("Error, zg_vector allowed only with 1 structures")
 
         self.N = N
         Nat_sc = np.prod(self.supercell) * self.dyn_0.structure.N_atoms
@@ -1390,7 +1397,10 @@ Error, the following stress files are missing from the ensemble:
 
         structures = []
         if evenodd:
-            structs = self.dyn_0.ExtractRandomStructures(N // 2, self.T0, project_on_vectors = project_on_modes, lock_low_w = self.ignore_small_w, sobol = sobol, sobol_scramble = sobol_scramble, sobol_scatter = sobol_scatter, classical_limit = classical_limit)  # normal Sobol generator****Diegom_test****
+            #
+            # With antithetic sampling we use 
+            #
+            structs = self.dyn_0.ExtractRandomStructures(N // 2, self.T0, project_on_vectors = project_on_modes, lock_low_w = self.ignore_small_w, sobol = sobol, sobol_scramble = sobol_scramble, sobol_scatter = sobol_scatter, classical_limit = classical_limit, zg_disp = zg_disp)  # normal Sobol generator****Diegom_test****
 
 
 
@@ -1401,7 +1411,7 @@ Error, the following stress files are missing from the ensemble:
                 new_s.coords = super_struct.coords - new_s.get_displacement(super_struct)
                 structures.append(new_s)
         else:
-            structures = self.dyn_0.ExtractRandomStructures(N, self.T0, project_on_vectors = project_on_modes, lock_low_w = self.ignore_small_w, sobol = sobol, sobol_scramble = sobol_scramble, sobol_scatter = sobol_scatter, classical_limit = classical_limit)  # normal Sobol generator****Diegom_test****
+            structures = self.dyn_0.ExtractRandomStructures(N, self.T0, project_on_vectors = project_on_modes, lock_low_w = self.ignore_small_w, sobol = sobol, sobol_scramble = sobol_scramble, sobol_scatter = sobol_scatter, classical_limit = classical_limit, zg_disp = zg_disp)  # normal Sobol generator****Diegom_test****
 
 
         # Enforce all the processors to share the same structures
