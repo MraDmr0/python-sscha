@@ -1381,9 +1381,9 @@ Error, the following stress files are missing from the ensemble:
 
         """
 
-	if evenodd:
+        if evenodd:
             if (N % 2 != 0):
-		raise ValueError("Error, evenodd allowed only with an even number of random structures")
+                raise ValueError("Error, evenodd allowed only with an even number of random structures")
              
             if zg_disp and (N != 2):
                 raise ValueError("Error, zg_disp allowed only with 2 structures")
