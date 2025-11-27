@@ -1381,14 +1381,17 @@ Error, the following stress files are missing from the ensemble:
 
         """
 
-        if evenodd and (N % 2 != 0):
-            raise ValueError("Error, evenodd allowed only with an even number of random structures")
-            if zg_vector and (N != 2):
-               raise ValueError("Error, zg_vector allowed only with 2 structures")
-        else:
-            if zg_vector and (N != 1):
-               raise ValueError("Error, zg_vector allowed only with 1 structures")
+	if evenodd:
+            if (N % 2 != 0):
+		raise ValueError("Error, evenodd allowed only with an even number of random structures")
+             
+            if zg_disp and (N != 2):
+                raise ValueError("Error, zg_disp allowed only with 2 structures")
 
+        else:
+            if zg_disp and (N != 1):
+                raise ValueError("Error, zg_disp allowed only with 1 structure")
+        
         self.N = N
         Nat_sc = np.prod(self.supercell) * self.dyn_0.structure.N_atoms
         self.structures = []
